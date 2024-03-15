@@ -46,4 +46,37 @@ class CarController extends Controller
             'data' => $car,
         ]);
     }
+
+    public function create(Request $request)
+    {
+        // validating inputted data
+        $request->validate([
+            'make' => 'required|string|max:20',
+            'model' => 'required|string|max:50',
+            'year' => 'required|integer|min:1950|max:2024',
+            'number_plate' => 'required|string|max:7|uppercase',
+            'weight' => 'nullable|integer|max:3000',
+            'electric' => 'required|boolean',
+        ]);
+        // create a new Car Model
+        $car = new Car();
+        // add POST data
+        $car->make = $request->make;
+        $car->model = $request->model;
+        $car->year = $request->year;
+        $car->number_plate = $request->number_plate;
+        $car->electric = $request->electric;
+
+        // check for errors on save
+        if (! $car->save()) {
+            return response()->json([
+                'message' => 'Could not add new car',
+            ], 500);
+        }
+
+        // success message
+        return response()->json([
+            'message' => 'New car added',
+        ]);
+    }
 }

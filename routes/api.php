@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/cars', [CarController::class, 'all']);
 Route::get('/cars/{id}', [CarController::class, 'find']);
+Route::post('/cars', [CarController::class, 'create']);

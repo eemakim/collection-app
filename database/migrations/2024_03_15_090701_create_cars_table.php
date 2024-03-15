@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('number_plate');
             $table->integer('weight')->nullable();
             $table->boolean('electric')->default(false);
+            $table->timestamps();
         });
     }
 };
