@@ -37,7 +37,7 @@ class CarController extends Controller
         $car = Car::find($id);
         if (! $car) {
             return response()->json([
-                'message' => 'Car not found',
+                'message' => 'Error - car not found',
             ], 400);
         }
 
@@ -70,7 +70,7 @@ class CarController extends Controller
         // check for errors on save
         if (! $car->save()) {
             return response()->json([
-                'message' => 'Could not add new car',
+                'message' => 'Error - could not add new car',
             ], 500);
         }
 
@@ -93,7 +93,7 @@ class CarController extends Controller
         $car = Car::find($id);
         if (! $car) {
             return response()->json([
-                'message' => 'Car not found',
+                'message' => 'Error - car not found',
             ], 400);
         }
 
@@ -123,6 +123,21 @@ class CarController extends Controller
 
         return response()->json([
             'message' => 'Car updated successfully',
+        ]);
+    }
+
+    public function delete(int $id)
+    {
+        $car = Car::find($id);
+        if (! $car) {
+            return response()->json([
+                'message' => 'Error - car not found',
+            ], 400);
+        }
+        $car->delete();
+
+        return response()->json([
+            'message' => 'Car deleted',
         ]);
     }
 }

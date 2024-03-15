@@ -12,3 +12,4 @@ Route::get('/cars', [CarController::class, 'all']);
 Route::get('/cars/{id}', [CarController::class, 'find']);
 Route::post('/cars', [CarController::class, 'create']);
 Route::put('/cars/{id}', [CarController::class, 'update']);
+Route::delete('/cars/{id}', [CarController::class, 'delete']);
