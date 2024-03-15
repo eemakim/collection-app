@@ -11,17 +11,28 @@ class CarController extends Controller
     {
         // to allow search in all cars results
         $search = $request->search;
+
         $hidden = ['number_plate', 'weight', 'electric'];
 
         // using whereAny to search in all specified fields and return the search results
         if ($search) {
             return response()->json([
-                'message' => 'Products returned',
+                'message' => 'Cars returned',
                 'data' => Car::whereAny([
                     'make',
                     'model',
                     'year',
                 ], 'LIKE', "%$search%")->get()->makeHidden($hidden),
+            ]);
+        }
+        $sort = $request->sort;
+        $request->validate([
+            '$sort' => 'in:asc, desc',
+        ]);
+        if ($sort) {
+            return response()->json([
+                'message' => 'Cars ordered',
+                'data' => Car::orderBy('make', $sort)->get()->makeHidden($hidden),
             ]);
         }
 
