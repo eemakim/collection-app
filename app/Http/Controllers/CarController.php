@@ -27,8 +27,23 @@ class CarController extends Controller
 
         // returning all car results where no search used
         return response()->json([
-            'message' => 'Products returned',
+            'message' => 'Cars returned',
             'data' => Car::all()->makeHidden($hidden),
+        ]);
+    }
+
+    public function find(int $id)
+    {
+        $car = Car::find($id);
+        if (! $car) {
+            return response()->json([
+                'message' => 'Car not found',
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'Car returned',
+            'data' => $car,
         ]);
     }
 }
