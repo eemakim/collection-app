@@ -21,6 +21,4 @@ return new class extends Migration
             $table->boolean('electric')->default(false);
         });
     }
-
-
 };

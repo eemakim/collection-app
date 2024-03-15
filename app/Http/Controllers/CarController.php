@@ -7,14 +7,28 @@ use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
-    public function all()
+    public function all(Request $request)
     {
-        return Car::all();
-    }
-    public function getSingle(int $id)
-    {
-        return Car::find($id);
-    }
+        // to allow search in all cars results
+        $search = $request->search;
+        $hidden = ['number_plate', 'weight', 'electric'];
 
+        // using whereAny to search in all specified fields and return the search results
+        if ($search) {
+            return response()->json([
+                'message' => 'Products returned',
+                'data' => Car::whereAny([
+                    'make',
+                    'model',
+                    'year',
+                ], 'LIKE', "%$search%")->get()->makeHidden($hidden),
+            ]);
+        }
 
+        // returning all car results where no search used
+        return response()->json([
+            'message' => 'Products returned',
+            'data' => Car::all()->makeHidden($hidden),
+        ]);
+    }
 }

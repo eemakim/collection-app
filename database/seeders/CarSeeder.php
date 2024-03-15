@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -21,7 +20,7 @@ class CarSeeder extends Seeder
                 'year' => rand(1950, 2024),
                 'number_plate' => strtoupper(Str::random(7)),
                 'weight' => rand(900, 3000),
-                'electric' => rand(0,1)
+                'electric' => rand(0, 1),
 
             ]);
         }
