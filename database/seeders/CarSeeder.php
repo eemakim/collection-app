@@ -21,7 +21,7 @@ class CarSeeder extends Seeder
                 'number_plate' => strtoupper(Str::random(7)),
                 'weight' => rand(900, 3000),
                 'electric' => rand(0, 1),
-
+                'colour' => rand(1, 12),
             ]);
         }
     }

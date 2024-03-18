@@ -27,7 +27,7 @@ class CarController extends Controller
         if ($search && $sort) {
             return response()->json([
                 'message' => 'Cars returned',
-                'data' => $query->orderBy('make', $sort)->get()->makeHidden($hidden)
+                'data' => $query->orderBy('make', $sort)->get()->makeHidden($hidden),
             ]);
         }
 
@@ -42,7 +42,7 @@ class CarController extends Controller
         // just sort
         if ($sort) {
             return response()->json([
-                'message' => 'Cars ordered in ' . $sort . 'ending order',
+                'message' => 'Cars ordered in '.$sort.'ending order',
                 'data' => $query->orderBy('make', $sort)->get()->makeHidden($hidden),
             ]);
         }
