@@ -9,34 +9,45 @@ class CarController extends Controller
 {
     public function all(Request $request)
     {
-        // to allow search in all cars results
-        $search = $request->search;
-
         $hidden = ['number_plate', 'weight', 'electric'];
 
-        // using whereAny to search in all specified fields and return the search results
-        if ($search) {
-            return response()->json([
-                'message' => 'Cars returned',
-                'data' => Car::whereAny([
-                    'make',
-                    'model',
-                    'year',
-                ], 'LIKE', "%$search%")->get()->makeHidden($hidden),
-            ]);
-        }
+        $search = $request->search;
         $sort = $request->sort;
         $request->validate([
             '$sort' => 'in:asc, desc',
         ]);
-        if ($sort) {
+
+        $query = Car::whereAny([
+            'make',
+            'model',
+            'year',
+        ], 'LIKE', "%$search%");
+
+        // search and sort
+        if ($search && $sort) {
             return response()->json([
-                'message' => 'Cars ordered',
-                'data' => Car::orderBy('make', $sort)->get()->makeHidden($hidden),
+                'message' => 'Cars returned',
+                'data' => $query->orderBy('make', $sort)->get()->makeHidden($hidden)
             ]);
         }
 
-        // returning all car results where no search used
+        // just search
+        if ($search) {
+            return response()->json([
+                'message' => 'Cars returned',
+                'data' => $query->get()->makeHidden($hidden),
+            ]);
+        }
+
+        // just sort
+        if ($sort) {
+            return response()->json([
+                'message' => 'Cars ordered in ' . $sort . 'ending order',
+                'data' => $query->orderBy('make', $sort)->get()->makeHidden($hidden),
+            ]);
+        }
+
+        // returning all car results where no search or sort used
         return response()->json([
             'message' => 'Cars returned',
             'data' => Car::all()->makeHidden($hidden),
