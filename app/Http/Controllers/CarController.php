@@ -9,13 +9,13 @@ class CarController extends Controller
 {
     public function all(Request $request)
     {
-        $hidden = ['number_plate', 'weight', 'electric'];
-
+        $request->validate([
+            'sort' => 'in:asc, desc',
+        ]);
         $search = $request->search;
         $sort = $request->sort;
-        $request->validate([
-            '$sort' => 'in:asc, desc',
-        ]);
+
+        $hidden = ['number_plate', 'weight', 'electric'];
 
         $query = Car::whereAny([
             'make',
@@ -23,34 +23,13 @@ class CarController extends Controller
             'year',
         ], 'LIKE', "%$search%");
 
-        // search and sort
-        if ($search && $sort) {
-            return response()->json([
-                'message' => 'Cars returned',
-                'data' => $query->orderBy('make', $sort)->get()->makeHidden($hidden),
-            ]);
-        }
-
-        // just search
-        if ($search) {
-            return response()->json([
-                'message' => 'Cars returned',
-                'data' => $query->get()->makeHidden($hidden),
-            ]);
-        }
-
-        // just sort
         if ($sort) {
-            return response()->json([
-                'message' => 'Cars ordered in '.$sort.'ending order',
-                'data' => $query->orderBy('make', $sort)->get()->makeHidden($hidden),
-            ]);
+            $query = $query->orderBy('make', $sort);
         }
 
-        // returning all car results where no search or sort used
         return response()->json([
             'message' => 'Cars returned',
-            'data' => Car::all()->makeHidden($hidden),
+            'data' => $query->get()->makeHidden($hidden),
         ]);
     }
 
